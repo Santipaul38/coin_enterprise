@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-7xl mx-auto mt-10">
-    <h1 class="text-4xl text-center bg-gray-400/50 pb-12 pt-4 rounded-t-xl">
+    <h1 class="text-4xl text-center bg-gray-300/50 pb-12 pt-4 rounded-t-xl">
       Prices Place
     </h1>
     <section class="rounded-xl border overflow-auto shadow-2xl -mt-6">
@@ -142,12 +142,11 @@
                 </div>
 
                 <div class="mt-4">
-                  <button
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium hover:bg-yellow-400"
+                  <div
+                    class="inline-flex justify-center rounded-md bg-yellow-300 px-4 py-2 text-sm font-medium hover:bg-yellow-400 cursor-pointer"
                   >
                     Comprar
-                  </button>
+                  </div>
                 </div>
               </DialogPanel>
             </TransitionChild>
