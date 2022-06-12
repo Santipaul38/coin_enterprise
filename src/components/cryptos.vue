@@ -244,7 +244,7 @@
                       inputmode="decimal"
                       min="1"
                       step=".0001"
-                      @change="convertFromPrices()"
+                      @keyup="convertFromPrices()"
                     />
                   </div>
                   <div class="relative h-8 -my-2">
@@ -365,7 +365,7 @@
                       placeholder="0"
                       inputmode="decimal"
                       min="1"
-                      @change="convertToPrices()"
+                      @keyup="convertToPrices()"
                     />
                   </div>
                 </div>
