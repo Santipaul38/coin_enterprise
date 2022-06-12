@@ -66,7 +66,7 @@
                 <span class="sr-only">Open user menu</span>
                 <img
                   class="h-8 w-8 rounded-full"
-                  src="../assets/images/gigolo.png"
+                  src="../assets/images/pampita.png"
                   alt=""
                 />
               </MenuButton>

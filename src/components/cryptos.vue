@@ -234,7 +234,18 @@
                       </div>
                     </Listbox>
                     <!-- Fin de lista selectora de primer crypto -->
-                    <input type="number" class="bg-gray-200 w-min" />
+                    <input
+                      v-if="selectedToCrypto.id && selectedFromCrypto.id"
+                      v-model="fromQuantity"
+                      class="bg-transparent text-right text-3xl w-1/3 outline-none"
+                      required
+                      type="number"
+                      placeholder="0"
+                      inputmode="decimal"
+                      min="1"
+                      step=".0001"
+                      @change="convertFromPrices()"
+                    />
                   </div>
                   <div class="relative h-8 -my-2">
                     <SwitchVerticalIcon
@@ -344,8 +355,18 @@
                         </transition>
                       </div>
                     </Listbox>
-                    <!-- Fin de lista selectora de primer crypto -->
-                    <input type="number" class="bg-gray-200 w-min" />
+                    <!-- Fin de lista selectora de segunda crypto -->
+                    <input
+                      v-if="selectedToCrypto.id && selectedFromCrypto.id"
+                      v-model="toQuantity"
+                      class="bg-transparent text-right text-3xl w-1/3 outline-none"
+                      required
+                      type="number"
+                      placeholder="0"
+                      inputmode="decimal"
+                      min="1"
+                      @change="convertToPrices()"
+                    />
                   </div>
                 </div>
 
@@ -385,6 +406,8 @@ import { SwitchVerticalIcon, XIcon } from "@heroicons/vue/outline";
 import { CheckIcon, SelectorIcon } from "@heroicons/vue/solid";
 
 const selectedFromCrypto = ref({});
+const fromQuantity = ref(null);
+const toQuantity = ref(null);
 const selectedToCrypto = ref({});
 const cryptoResponse = ref({});
 const currency = "usd";
@@ -396,6 +419,8 @@ const formatPrice = (value) => {
 };
 
 function closeNewBuy() {
+  fromQuantity.value = null;
+  toQuantity.value = null;
   openBuy.value = false;
 }
 
@@ -406,8 +431,11 @@ function openNewBuy(crypto) {
 
 function switchCrypto() {
   let aux = selectedFromCrypto.value;
+  let aux2 = fromQuantity.value;
   selectedFromCrypto.value = selectedToCrypto.value;
+  fromQuantity.value = toQuantity.value;
   selectedToCrypto.value = aux;
+  toQuantity.value = aux2;
 }
 
 const fetchCryptos = async () => {
@@ -417,6 +445,22 @@ const fetchCryptos = async () => {
     )
     .then((res) => (cryptoResponse.value = res.data));
 };
-console.log(openNewBuy);
+
+function convertFromPrices() {
+  const relation =
+    selectedFromCrypto.value.current_price /
+    selectedToCrypto.value.current_price;
+
+  toQuantity.value = fromQuantity.value * relation;
+}
+
+function convertToPrices() {
+  const relation =
+    selectedToCrypto.value.current_price /
+    selectedFromCrypto.value.current_price;
+
+  fromQuantity.value = toQuantity.value * relation;
+}
+
 fetchCryptos();
 </script>
