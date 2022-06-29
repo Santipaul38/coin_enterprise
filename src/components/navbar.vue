@@ -16,7 +16,7 @@
         <div
           class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start"
         >
-          <div class="flex-shrink-0 flex items-center">
+          <div class="flex-shrink-0 flex items-center cursor-pointer">
             <img
               class="block lg:hidden h-8 w-auto"
               src="../assets/icons/icon.svg"
@@ -28,21 +28,14 @@
               alt="Coin"
             />
           </div>
-          <div class="hidden sm:block sm:ml-6">
+          <div class="hidden sm:block sm:ml-6 my-auto">
             <div class="flex space-x-4">
-              <a
-                v-for="item in navigation"
-                :key="item.name"
-                :href="item.href"
-                :class="[
-                  item.current
-                    ? 'bg-gray-900 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'px-3 py-2 rounded-md text-sm font-medium',
-                ]"
-                :aria-current="item.current ? 'page' : undefined"
-                >{{ item.name }}</a
+              <button
+                class="text-white bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2"
+                @click="$emit('openMoves')"
               >
+                Balance
+              </button>
             </div>
           </div>
         </div>
@@ -151,9 +144,4 @@ import {
   MenuItems,
 } from "@headlessui/vue";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
-
-const navigation = [
-  { name: "Comprar", href: "#", current: true },
-  { name: "Vender", href: "#", current: false },
-];
 </script>

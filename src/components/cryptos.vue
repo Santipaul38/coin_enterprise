@@ -135,246 +135,273 @@
                 </div>
                 <div class="mt-2">
                   <div
-                    class="w-full h-20 px-4 bg-gray-100 rounded-xl flex flex-row items-center justify-between"
+                    class="w-full h-max pt-1 pb-4 px-4 bg-gray-100 rounded-xl"
                   >
-                    <!-- Comienzo de lista selectora de primer crypto -->
-                    <Listbox v-model="selectedFromCrypto">
-                      <div class="relative w-2/5">
-                        <ListboxButton
-                          class="relative w-full rounded-lg bg-white shadow-md text-left cursor-pointer sm:text-sm"
-                        >
-                          <div
-                            v-if="!selectedFromCrypto.id"
-                            class="py-3 px-2 text-center hover:bg-yellow-500/60 rounded-lg"
+                    <div class="mb-1 flex flex-row justify-between">
+                      <span class="text-sm"
+                        >Quiero Cambiar: {{ selectedFromCrypto.name }}</span
+                      >
+                      <button
+                        class="rounded-lg text-xs font-semibold bg-yellow-300 hover:bg-yellow-400 px-2"
+                        @click="fromQuantity = 1000, convertFromPrices()"
+                      >
+                        MAX
+                      </button>
+                    </div>
+                    <div class="flex flex-row items-center justify-between">
+                      <!-- Comienzo de lista selectora de primer crypto -->
+                      <Listbox >
+                        <div class="relative w-2/5">
+                          <ListboxButton
+                            class="relative w-full rounded-lg bg-white shadow-md text-left cursor-pointer sm:text-sm"
                           >
-                            <span class="uppercase font-semibold"
-                              >Seleccione una crypto</span
+                            <div
+                              v-if="!selectedFromCrypto.id"
+                              class="py-3 px-2 text-center hover:bg-yellow-500/60 rounded-lg"
                             >
-                          </div>
-                          <div
-                            class="flex flex-row items-center justify-between py-1 px-3"
-                            v-else
-                          >
-                            <img
-                              :src="selectedFromCrypto.image"
-                              alt="cryptoImage"
-                              class="h-10"
-                            />
-                            <span
-                              class="block truncate uppercase font-semibold text-2xl -ml-4"
-                              >{{ selectedFromCrypto.symbol }}</span
-                            >
-                            <SelectorIcon class="h-5 w-5 text-gray-400 ml-6" />
-                          </div>
-                        </ListboxButton>
-
-                        <transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
-                        >
-                          <ListboxOptions
-                            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm z-10"
-                          >
-                            <ListboxOption
-                              v-slot="{ active, selected }"
-                              v-for="crypto in cryptoResponse.filter(
-                                (c) => c.id !== selectedToCrypto.id
-                              )"
-                              :key="crypto.id"
-                              :value="crypto"
-                              as="template"
-                              class="cursor-pointer"
-                            >
-                              <li
-                                :class="[
-                                  active
-                                    ? 'bg-amber-100 text-amber-900'
-                                    : 'text-gray-900',
-                                  'relative select-none py-2 px-2',
-                                ]"
+                              <span class="uppercase font-semibold"
+                                >Seleccione una crypto</span
                               >
-                                <div
-                                  class="flex flex-row items-center space-x-2"
+                            </div>
+                            <div
+                              class="flex flex-row items-center justify-between py-1 px-3"
+                              v-else
+                            >
+                              <img
+                                :src="selectedFromCrypto.image"
+                                alt="cryptoImage"
+                                class="h-10"
+                              />
+                              <span
+                                class="block truncate uppercase font-semibold text-2xl -ml-4"
+                                >{{ selectedFromCrypto.symbol }}</span
+                              >
+                              <SelectorIcon
+                                class="h-5 w-5 text-gray-400 ml-6"
+                              />
+                            </div>
+                          </ListboxButton>
+
+                          <transition
+                            leave-active-class="transition duration-100 ease-in"
+                            leave-from-class="opacity-100"
+                            leave-to-class="opacity-0"
+                          >
+                            <ListboxOptions
+                              class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm z-10"
+                            >
+                              <ListboxOption
+                                v-slot="{ active, selected }"
+                                v-for="crypto in cryptoResponse.filter(
+                                  (c) => c.id !== selectedToCrypto.id
+                                )"
+                                :key="crypto.id"
+                                :value="crypto"
+                                as="template"
+                                class="cursor-pointer"
+                              >
+                                <li
+                                  :class="[
+                                    active
+                                      ? 'bg-amber-100 text-amber-900'
+                                      : 'text-gray-900',
+                                    'relative select-none py-2 px-2',
+                                  ]"
                                 >
-                                  <img
-                                    :src="crypto.image"
-                                    alt="cryptoImage"
-                                    class="h-8"
-                                  />
-                                  <div class="leading-none">
-                                    <span
-                                      :class="[
-                                        selected
-                                          ? 'font-bold'
-                                          : 'font-semibold',
-                                        'block truncate',
-                                      ]"
-                                      class="uppercase text-base"
-                                      >{{ crypto.symbol }}</span
-                                    >
-                                    <span class="text-xs text-gray-400">{{
-                                      crypto.name
-                                    }}</span>
+                                  <div
+                                    class="flex flex-row items-center space-x-2"
+                                  >
+                                    <img
+                                      :src="crypto.image"
+                                      alt="cryptoImage"
+                                      class="h-8"
+                                    />
+                                    <div class="leading-none">
+                                      <span
+                                        :class="[
+                                          selected
+                                            ? 'font-bold'
+                                            : 'font-semibold',
+                                          'block truncate',
+                                        ]"
+                                        class="uppercase text-base"
+                                        >{{ crypto.symbol }}</span
+                                      >
+                                      <span class="text-xs text-gray-400">{{
+                                        crypto.name
+                                      }}</span>
+                                    </div>
                                   </div>
-                                </div>
-                                <span
-                                  v-if="selected"
-                                  class="absolute inset-y-0 right-0 flex items-center pl-3 text-amber-600"
-                                >
-                                  <CheckIcon
-                                    class="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </transition>
-                      </div>
-                    </Listbox>
-                    <!-- Fin de lista selectora de primer crypto -->
-                    <input
-                      v-if="selectedToCrypto.id && selectedFromCrypto.id"
-                      v-model="fromQuantity"
-                      class="bg-transparent text-right text-3xl w-1/3 outline-none"
-                      required
-                      type="number"
-                      placeholder="0"
-                      inputmode="decimal"
-                      min="1"
-                      step=".0001"
-                      @keyup="convertFromPrices()"
-                    />
+                                  <span
+                                    v-if="selected"
+                                    class="absolute inset-y-0 right-0 flex items-center pl-3 text-amber-600"
+                                  >
+                                    <CheckIcon
+                                      class="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </li>
+                              </ListboxOption>
+                            </ListboxOptions>
+                          </transition>
+                        </div>
+                      </Listbox>
+                      <!-- Fin de lista selectora de primer crypto -->
+                      <input
+                        v-if="selectedToCrypto.id && selectedFromCrypto.id"
+                        v-model="fromQuantity"
+                        class="bg-transparent text-right text-3xl w-1/3 outline-none"
+                        required
+                        type="number"
+                        placeholder="0"
+                        inputmode="decimal"
+                        min="1"
+                        step=".0001"
+                        @keyup="convertFromPrices()"
+                      />
+                    </div>
                   </div>
                   <div class="relative h-8 -my-2">
                     <SwitchVerticalIcon
                       class="h-10 w-10 mx-auto bg-gray-100 p-1 rounded-xl border border-white absolute inset-0 hover:text-yellow-600 cursor-pointer"
-                      @click="switchCrypto()"
                     />
                   </div>
                   <div
-                    class="w-full h-20 px-4 bg-gray-100 rounded-xl flex flex-row items-center justify-between"
+                    class="w-full h-max pb-1 pt-4 px-4 bg-gray-100 rounded-xl"
                   >
-                    <!-- Comienzo de lista selectora de segunda crypto -->
-                    <Listbox v-model="selectedToCrypto">
-                      <div class="relative w-2/5">
-                        <ListboxButton
-                          class="relative w-full rounded-lg bg-white shadow-md text-left cursor-pointer sm:text-sm"
-                        >
-                          <div
-                            v-if="!selectedToCrypto.id"
-                            class="py-3 px-2 text-center hover:bg-yellow-500/60 rounded-lg"
+                    <div class="flex flex-row items-center justify-between">
+                      <!-- Comienzo de lista selectora de segunda crypto -->
+                      <Listbox v-model="selectedToCrypto">
+                        <div class="relative w-2/5">
+                          <ListboxButton
+                            class="relative w-full rounded-lg bg-white shadow-md text-left cursor-pointer sm:text-sm"
                           >
-                            <span class="uppercase font-semibold"
-                              >Seleccione una crypto</span
+                            <div
+                              v-if="!selectedToCrypto.id"
+                              class="py-3 px-2 text-center hover:bg-yellow-500/60 rounded-lg"
                             >
-                          </div>
-                          <div
-                            class="flex flex-row items-center justify-between py-1 px-3"
-                            v-else
-                          >
-                            <img
-                              :src="selectedToCrypto.image"
-                              alt="cryptoImage"
-                              class="h-10"
-                            />
-                            <span
-                              class="block truncate uppercase font-semibold text-2xl -ml-4"
-                              >{{ selectedToCrypto.symbol }}</span
-                            >
-                            <SelectorIcon class="h-5 w-5 text-gray-400 ml-6" />
-                          </div>
-                        </ListboxButton>
-
-                        <transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
-                        >
-                          <ListboxOptions
-                            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm z-10"
-                          >
-                            <ListboxOption
-                              v-slot="{ active, selected }"
-                              v-for="crypto2 in cryptoResponse.filter(
-                                (c) => c.id !== selectedFromCrypto.id
-                              )"
-                              :key="crypto2.id"
-                              :value="crypto2"
-                              as="template"
-                              class="cursor-pointer"
-                            >
-                              <li
-                                v-if="
-                                  selectedFromCrypto.symbol !== crypto2.symbol
-                                "
-                                :class="[
-                                  active
-                                    ? 'bg-amber-100 text-amber-900'
-                                    : 'text-gray-900',
-                                  'relative select-none py-2 px-2',
-                                ]"
+                              <span class="uppercase font-semibold"
+                                >Seleccione una crypto</span
                               >
-                                <div
-                                  class="flex flex-row items-center space-x-2"
+                            </div>
+                            <div
+                              class="flex flex-row items-center justify-between py-1 px-3"
+                              v-else
+                            >
+                              <img
+                                :src="selectedToCrypto.image"
+                                alt="cryptoImage"
+                                class="h-10"
+                              />
+                              <span
+                                class="block truncate uppercase font-semibold text-2xl -ml-4"
+                                >{{ selectedToCrypto.symbol }}</span
+                              >
+                              <SelectorIcon
+                                class="h-5 w-5 text-gray-400 ml-6"
+                              />
+                            </div>
+                          </ListboxButton>
+
+                          <transition
+                            leave-active-class="transition duration-100 ease-in"
+                            leave-from-class="opacity-100"
+                            leave-to-class="opacity-0"
+                          >
+                            <ListboxOptions
+                              class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg sm:text-sm z-10"
+                            >
+                              <ListboxOption
+                                v-slot="{ active, selected }"
+                                v-for="crypto2 in cryptoResponse.filter(
+                                  (c) => c.id !== selectedFromCrypto.id
+                                )"
+                                :key="crypto2.id"
+                                :value="crypto2"
+                                as="template"
+                                class="cursor-pointer"
+                              >
+                                <li
+                                  v-if="
+                                    selectedFromCrypto.symbol !== crypto2.symbol
+                                  "
+                                  :class="[
+                                    active
+                                      ? 'bg-amber-100 text-amber-900'
+                                      : 'text-gray-900',
+                                    'relative select-none py-2 px-2',
+                                  ]"
                                 >
-                                  <img
-                                    :src="crypto2.image"
-                                    alt="cryptoImage"
-                                    class="h-8"
-                                  />
-                                  <div class="leading-none">
-                                    <span
-                                      :class="[
-                                        selected
-                                          ? 'font-bold'
-                                          : 'font-semibold',
-                                        'block truncate',
-                                      ]"
-                                      class="uppercase text-base"
-                                      >{{ crypto2.symbol }}</span
-                                    >
-                                    <span class="text-xs text-gray-400">{{
-                                      crypto2.name
-                                    }}</span>
+                                  <div
+                                    class="flex flex-row items-center space-x-2"
+                                  >
+                                    <img
+                                      :src="crypto2.image"
+                                      alt="cryptoImage"
+                                      class="h-8"
+                                    />
+                                    <div class="leading-none">
+                                      <span
+                                        :class="[
+                                          selected
+                                            ? 'font-bold'
+                                            : 'font-semibold',
+                                          'block truncate',
+                                        ]"
+                                        class="uppercase text-base"
+                                        >{{ crypto2.symbol }}</span
+                                      >
+                                      <span class="text-xs text-gray-400">{{
+                                        crypto2.name
+                                      }}</span>
+                                    </div>
                                   </div>
-                                </div>
-                                <span
-                                  v-if="selected"
-                                  class="absolute inset-y-0 right-0 flex items-center pl-3 text-amber-600"
-                                >
-                                  <CheckIcon
-                                    class="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </transition>
-                      </div>
-                    </Listbox>
-                    <!-- Fin de lista selectora de segunda crypto -->
-                    <input
-                      v-if="selectedToCrypto.id && selectedFromCrypto.id"
-                      v-model="toQuantity"
-                      class="bg-transparent text-right text-3xl w-1/3 outline-none"
-                      required
-                      type="number"
-                      placeholder="0"
-                      inputmode="decimal"
-                      min="1"
-                      @keyup="convertToPrices()"
-                    />
+                                  <span
+                                    v-if="selected"
+                                    class="absolute inset-y-0 right-0 flex items-center pl-3 text-amber-600"
+                                  >
+                                    <CheckIcon
+                                      class="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </li>
+                              </ListboxOption>
+                            </ListboxOptions>
+                          </transition>
+                        </div>
+                      </Listbox>
+                      <!-- Fin de lista selectora de segunda crypto -->
+                      <input
+                        v-if="selectedToCrypto.id && selectedFromCrypto.id"
+                        v-model="toQuantity"
+                        class="bg-transparent text-right text-3xl w-1/3 outline-none"
+                        required
+                        type="number"
+                        placeholder="0"
+                        inputmode="decimal"
+                        min="1"
+                        @keyup="convertToPrices()"
+                      />
+                    </div>
+                    <div class="mt-1">
+                      <span class="text-sm"
+                        >Quiero recibir: {{ selectedToCrypto.name }}</span
+                      >
+                    </div>
                   </div>
                 </div>
 
                 <div class="mt-4">
                   <div
                     class="inline-flex justify-center rounded-md bg-yellow-300 px-4 py-2 text-sm font-medium hover:bg-yellow-400 cursor-pointer"
+                    @click="
+                      exchange();
+                      closeNewBuy();
+                    "
                   >
-                    Comprar
+                    Realizar
                   </div>
                 </div>
               </DialogPanel>
@@ -425,7 +452,8 @@ function closeNewBuy() {
 }
 
 function openNewBuy(crypto) {
-  selectedFromCrypto.value = crypto;
+  selectedFromCrypto.value = cryptoResponse.value.find(x => x.symbol == 'usdt');
+  console.log(selectedFromCrypto)
   openBuy.value = true;
 }
 
@@ -444,6 +472,18 @@ const fetchCryptos = async () => {
       `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`
     )
     .then((res) => (cryptoResponse.value = res.data));
+
+  setTimeout(() => {
+    fetchCryptos();
+  }, 6000);
+};
+
+const exchange = () => {
+  axios.post("http://localhost:8081/compras", {
+    crypto: selectedToCrypto.value.symbol,
+    cantidad: toQuantity.value,
+    fecha: "2020-01-01",
+  });
 };
 
 function convertFromPrices() {
